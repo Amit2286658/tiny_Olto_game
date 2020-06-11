@@ -5,16 +5,21 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class guiManager {
 
-    private static Stage titleScreenStage;
+    private static Stage titleScreenStage, gameScreenStage;
 
     public static void createStageForTitleScreen(FitViewport uiViewPort, SpriteBatch batch){
         titleScreenStage = new Stage(uiViewPort, batch);
+    }
+
+    public static void createStageForGameScreen(FitViewport uiViewPort, SpriteBatch batch){
+        gameScreenStage = new Stage(uiViewPort, batch);
     }
 
     public static void addChildToTitleScreen(Actor... actors){
@@ -23,8 +28,18 @@ public class guiManager {
         }
     }
 
+    public static void addChildToGameScreenUi(Array<Actor> actors){
+        for (Actor actor : actors){
+            gameScreenStage.addActor(actor);
+        }
+    }
+
     public static Stage getTitleScreenStage() {
         return titleScreenStage;
+    }
+
+    public static Stage getGameScreenStage() {
+        return gameScreenStage;
     }
 
     public static void updateTitleScreenUi(float delta){
@@ -33,8 +48,16 @@ public class guiManager {
         }
     }
 
-    public static void draw(){
+    public static void drawTitleScreen(){
         titleScreenStage.draw();
+    }
+
+    public static void drawGameScreenUi(){
+        gameScreenStage.draw();
+    }
+
+    public static void actOnGameHud(){
+        gameScreenStage.act();
     }
 
     public static void disposeTitleScreen(){

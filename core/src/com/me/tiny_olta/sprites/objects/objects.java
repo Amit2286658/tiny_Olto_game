@@ -79,6 +79,11 @@ public abstract class objects implements Cloneable{
         position.x = x;
     }
 
+    public void reposition(float x, float y){
+        position.x = x;
+        position.y = y;
+    }
+
     public void setWidth(float width) {
         this.width = width;
     }

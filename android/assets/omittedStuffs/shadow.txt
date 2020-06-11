@@ -1,0 +1,26 @@
+shadow.png
+size: 915, 280
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+shadow
+  rotate: false
+  xy: 0, 0
+  size: 305, 280
+  orig: 305, 280
+  offset: 0, 0
+  index: 0
+shadow
+  rotate: false
+  xy: 305, 0
+  size: 305, 280
+  orig: 305, 280
+  offset: 0, 0
+  index: 1
+shadow
+  rotate: false
+  xy: 610, 0
+  size: 305, 280
+  orig: 305, 280
+  offset: 0, 0
+  index: 2

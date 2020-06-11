@@ -22,11 +22,11 @@ public class animatedOlta extends abstractActor {
 
     public animatedOlta(Vector2 position) {
         super();
-        walk = new Texture("hero_walk.png");
-        push = new Texture("hero_push.png");
-        jump = new Texture("jump.png");
-        idle = new Texture("hero_idle.png");
-        plain = new Texture("plain.png");
+        walk = new Texture("olta_walk.png");
+        push = new Texture("olta_push.png");
+        jump = new Texture("olta_jump.png");
+        idle = new Texture("olta_idle.png");
+        plain = new Texture("olta_plain.png");
 
         walking = new Array<>();
         pushing = new Array<>();

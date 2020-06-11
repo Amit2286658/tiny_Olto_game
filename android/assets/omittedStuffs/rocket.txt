@@ -1,0 +1,47 @@
+rocket.png
+size: 5748, 586
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+frame1
+  rotate: false
+  xy: 0, 0
+  size: 958, 586
+  orig: 958, 586
+  offset: 0, 0
+  index: 0
+frame2
+  rotate: false
+  xy: 958, 0
+  size: 958, 586
+  orig: 958, 586
+  offset: 0, 0
+  index: 1
+frame3
+  rotate: false
+  xy: 1916, 0
+  size: 958, 586
+  orig: 958, 586
+  offset: 0, 0
+  index: 2
+frame4
+  rotate: false
+  xy: 2874, 0
+  size: 958, 586
+  orig: 958, 586
+  offset: 0, 0
+  index: 3
+frame5
+  rotate: false
+  xy: 3832, 0
+  size: 958, 586
+  orig: 958, 586
+  offset: 0, 0
+  index: 4
+frame6
+  rotate: false
+  xy: 4790, 0
+  size: 958, 586
+  orig: 958, 586
+  offset: 0, 0
+  index: 5

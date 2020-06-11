@@ -1,0 +1,47 @@
+og.png
+size: 1794, 281
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+og0
+  rotate: false
+  xy: 0, 0
+  size: 299, 281
+  orig: 299, 281
+  offset: 0, 0
+  index: 0
+og1
+  rotate: false
+  xy: 299, 0
+  size: 299, 281
+  orig: 299, 281
+  offset: 0, 0
+  index: 1
+og2
+  rotate: false
+  xy: 598, 0
+  size: 299, 281
+  orig: 299, 281
+  offset: 0, 0
+  index: 2
+og3
+  rotate: false
+  xy: 897, 0
+  size: 299, 281
+  orig: 299, 281
+  offset: 0, 0
+  index: 3
+og4
+  rotate: false
+  xy: 1196, 0
+  size: 299, 281
+  orig: 299, 281
+  offset: 0, 0
+  index: 4
+og5
+  rotate: false
+  xy: 1495, 0
+  size: 299, 281
+  orig: 299, 281
+  offset: 0, 0
+  index: 5

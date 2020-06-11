@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
+import com.me.tiny_olta.constants;
 import com.me.tiny_olta.managers.vegetationManager;
 import com.me.tiny_olta.sprites.objects.objects;
 
@@ -13,6 +14,7 @@ public class tree extends objects {
 
     private Body treeBody;
     private BodyDef treeBodyDef;
+    public boolean isBack = true;
 
     public enum TYPE{
         TREE, CIRCLE_TREE, BUSH
@@ -51,16 +53,24 @@ public class tree extends objects {
         /*if (!MathUtils.randomBoolean()){
             region.flip(true, false);
         }*/
-
+        isBack = MathUtils.randomBoolean();
         setTexture(region);
 
-        setPosition(position);
+        if (type == TYPE.TREE && !isBack){
+            setPosition(position, 0);
+        }else
+            setPosition(position, constants.GROUND_OFFSET);
 
         float widthToHeightRatio =  (float) region.getRegionWidth()/ (float) region.getRegionHeight();
 
-        if (getTreeType() != TYPE.BUSH)
-            setWidth(MathUtils.random(40, 80));
-        else setWidth(MathUtils.random(10, 20));
+        if (getTreeType() != TYPE.BUSH) {
+            if (type == TYPE.TREE && !isBack){
+                setWidth(MathUtils.random(40, 60));//60, 80));
+            }else
+                setWidth(MathUtils.random(30, 40));//40, 60));
+        }
+        else setWidth(MathUtils.random(10, 15));//15, 35));
+
         setHeight(getWidth()/widthToHeightRatio);
 
         if (type == TYPE.TREE) {
@@ -73,7 +83,7 @@ public class tree extends objects {
             shape.setRadius(unitHeight - 2);
 
             treeBodyDef = new BodyDef();
-            treeBodyDef.position.set(bodyPositionX, bodyPositionY + 12);
+            treeBodyDef.position.set(bodyPositionX, isBack ? bodyPositionY + 12 : bodyPositionY);
             treeBodyDef.type = BodyDef.BodyType.StaticBody;
 
             treeBody = world.createBody(treeBodyDef);
@@ -118,21 +128,31 @@ public class tree extends objects {
     }
 
     public void reposition(float x, vegetationManager.TreeTypeIdTextures id) {
-        reposition(x);
+        //reposition(x);
         /*if (!MathUtils.randomBoolean()){
             newRegion.flip(true, false);
         }*/
+
         setTexture(id.getRegion());
         setType(id.getType());
         this.treeBody = id.getBody();
+
+        isBack = MathUtils.randomBoolean();
+        if (!isBack && type == TYPE.TREE){
+            reposition(x, 0);
+        }else reposition(x, constants.GROUND_OFFSET);
 
         communicationObject = id;
 
         float widthToHeightRatio =  (float) id.getRegion().getRegionWidth()/ (float) id.getRegion().getRegionHeight();
 
-        if (getTreeType() != TYPE.BUSH)
-            setWidth(MathUtils.random(40, 80));
-        else setWidth(MathUtils.random(15, 35));
+        if (getTreeType() != TYPE.BUSH) {
+            if (!isBack && type == TYPE.TREE){
+                setWidth(MathUtils.random(40, 60));//60, 80));
+            }else
+                setWidth(MathUtils.random(30, 40));//40, 60));
+        }
+        else setWidth(MathUtils.random(10, 15));//15, 35));
         setHeight(getWidth()/widthToHeightRatio);
 
         if (type == TYPE.TREE) {
@@ -141,7 +161,7 @@ public class tree extends objects {
             float bodyPositionX = getPosition().x + getWidth() / 2;
             float bodyPositionY = getHeight() - unitHeight;
 
-            treeBody.setTransform(bodyPositionX, bodyPositionY + 12, 0);
+            treeBody.setTransform(bodyPositionX, isBack ? bodyPositionY + 12 : bodyPositionY, 0);
             treeBody.setAwake(true);
             treeBody.getFixtureList().first().getShape().setRadius(unitHeight - 2);
         }else if (type == TYPE.CIRCLE_TREE){

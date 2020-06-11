@@ -1,0 +1,19 @@
+fly.png
+size: 1268, 512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+fly1
+  rotate: false
+  xy: 0, 0
+  size: 634, 512
+  orig: 634, 512
+  offset: 0, 0
+  index: 0
+fly2
+  rotate: false
+  xy: 634, 0
+  size: 634, 512
+  orig: 634, 512
+  offset: 0, 0
+  index: 1

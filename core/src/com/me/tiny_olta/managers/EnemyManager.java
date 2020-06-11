@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.me.tiny_olta.constants;
 import com.me.tiny_olta.sprites.objects.*;
-import com.me.tiny_olta.sprites.olta;
+import com.me.tiny_olta.sprites.hero;
 import com.me.tiny_olta.sprites.throwableBomb;
 
 import java.util.Random;
@@ -174,7 +174,7 @@ public class EnemyManager {
         }
     }
 
-    public static boolean checkPlayerCollision(olta player, throwableBomb bomb){
+    public static boolean checkPlayerCollision(hero player, throwableBomb bomb){
         for (enemyId id : enemyList){
             if (id.getObject().isActive()) {
                 if (player.getPosition().x + constants.PLAYER_WIDTH > id.getObject().getPosition().x &&

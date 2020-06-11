@@ -89,12 +89,12 @@ public class settings extends abstractActor {
             }
         });
 
-        on_button = new TextureRegion(new Texture("gui/on_button.png"));
-        off_button = new TextureRegion(new Texture("gui/off_button.png"));
-        off_button_unelevated = new TextureRegion(new Texture("gui/off_black_button_unelevated.png"));
-        on_button_unelevated = new TextureRegion(new Texture("gui/on_black_button_unelevated.png"));
+        on_button = new TextureRegion(new Texture("gui/on_white.png"));
+        off_button = new TextureRegion(new Texture("gui/off_white.png"));
+        off_button_unelevated = new TextureRegion(new Texture("gui/off_black.png"));
+        on_button_unelevated = new TextureRegion(new Texture("gui/on_black.png"));
 
-        musicOn = new onButton(on_button, new Vector2(constants.WORLD_WIDTH/2f - 100 + 30, -252),
+        musicOn = new onButton(on_button, new Vector2(constants.WORLD_WIDTH/2f - 80, -252),
                 80, 34);
         musicOn.addListener(new InputListener(){
             @Override
@@ -112,7 +112,7 @@ public class settings extends abstractActor {
                 return false;
             }
         });
-        soundOn = new onButton(on_button, new Vector2(constants.WORLD_WIDTH/2f - 100 + 30, -339),
+        soundOn = new onButton(on_button, new Vector2(constants.WORLD_WIDTH/2f - 80, -339),
                 80, 34);
         soundOn.addListener(new InputListener(){
             @Override
@@ -134,7 +134,7 @@ public class settings extends abstractActor {
         settingsTable.row();
         settingsTable.row();
         settingsTable.row();
-        settingsTable.add(soundLabel).pad(46).expandX();
+        settingsTable.add(soundLabel).pad(48).expandX();
         settingsTable.row();
 
         settingsScreenStage.addActor(closeBut);
@@ -219,6 +219,13 @@ public class settings extends abstractActor {
                 soundOff.setPositionY(soundOff.getPosition().y - constants.SETTINGS_TITLE_SCREEN_REVEAL_VELOCITY * delta);
                 soundOff.setBoundY(soundOff.getPosition().y);
             }
+
+            if (alphaValue <= 0 && blurredBackground != null && blurredTexture != null){
+                blurredBackground.dispose();
+                blurredTexture.dispose();
+                blurredBackground = null;
+                blurredTexture = null;
+            }
         }
     }
 
@@ -263,13 +270,14 @@ public class settings extends abstractActor {
     }
 
     public Texture getBlurredTexture(){
-        if (blurredTexture == null && blurredBackground != null) {
+        if (blurredBackground != null && blurredTexture == null) {
             int blurRadius = 10;
             blurredBackground = guiManager.blur(blurredBackground, blurRadius, 8, true);
             blurredTexture = new Texture(blurredBackground);
         }
         return blurredTexture;
     }
+
     public void updateAlphaFactor(float delta){
         if (shouldShow) {
             alphaCounter += 5 * delta;

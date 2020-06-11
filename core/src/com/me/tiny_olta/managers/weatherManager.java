@@ -5,30 +5,27 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.me.tiny_olta.constants;
-import com.me.tiny_olta.sprites.olta;
 
 public class weatherManager {
 
     private static Array<rainCluster> clusters = new Array<>();
-    private static Array<cloud> clouds = new Array<>();
     private static boolean isRaining = false, prepareToStop = false;
-    private static boolean shouldDraw = false;
+    public static boolean shouldDraw = false;
+    private static boolean shouldDrawRain = false;
     private static mist mist1, mist2;
-    private static cloud cloud0, cloud1;
     private static sky sky1, sky2;
+    private static lightning lightStrike;
     private static float skyAlpha = 0.1f, mistAlpha = 0.1f, rainAlpha = 0.1f;
     private static float r = 0f, g = 0f, b = 0f;
-
-    public enum CLOUD_LAYER {
-        LAYER0, LAYER1, LAYER2, LAYER3, LAYER4, LAYER5, LAYER6
-    }
 
     public static void rain(){
         isRaining = true;
         shouldDraw = true;
+        shouldDrawRain = MathUtils.randomBoolean();
         prepareToStop = false;
     }
 
@@ -61,23 +58,37 @@ public class weatherManager {
         mist2.flipTexture(true, false);
     }
 
+    public static void createLightning(){
+        lightStrike = new lightning();
+    }
+
+    public static void updateLightning(float delta){
+        lightStrike.update(delta);
+    }
+
     public static void updateLightProperties(float delta){
         Color dayColor = worldManager.getDayLight().getColor();
         r = dayColor.r;
         g = dayColor.g;
         b = dayColor.b;
         if (isRaining){
-            if ( r > 24f){
+            if ( r > 0.24f){
                 r -= constants.WEATHER_DAYLIGHT_COLOR_FACTOR * delta;
-            }else r = 24f;
+            }else if (r < 0.24f){
+                r += constants.WEATHER_DAYLIGHT_COLOR_FACTOR * delta;
+            }else r = 0.24f;
 
-            if (g > 24f){
+            if (g > 0.24f){
                 g -= constants.WEATHER_DAYLIGHT_COLOR_FACTOR * delta;
-            }else g = 24f;
+            }else if (g < 0.24f){
+                g += constants.WEATHER_DAYLIGHT_COLOR_FACTOR * delta;
+            }else g = 0.24f;
 
-            if (b < 24f){
+            if (b < 0.24f){
                 b += constants.WEATHER_DAYLIGHT_COLOR_FACTOR * delta;
-            }else b = 24f;
+            }else if (b > 0.24f){
+                b -= constants.WEATHER_DAYLIGHT_COLOR_FACTOR * delta;
+            }else b = 0.24f;
 
             worldManager.getDayLight().setColor(r, g, b, dayColor.a);
 
@@ -85,20 +96,8 @@ public class weatherManager {
                 constants.RAY_CASTING_DISTANCE -= 10 * delta;
             }else constants.RAY_CASTING_DISTANCE = 1000;
         }else {
-            if ( r < 100f){
-                r += constants.WEATHER_DAYLIGHT_COLOR_FACTOR * delta;
-            }else r = 100f;
-
-            if (g < 100f){
-                g += constants.WEATHER_DAYLIGHT_COLOR_FACTOR * delta;
-            }else g = 100f;
-
-            if (b > 0f){
-                b -= constants.WEATHER_DAYLIGHT_COLOR_FACTOR * delta;
-            }else b = 0f;
-
-            worldManager.getDayLight().setColor(r, g, b, dayColor.a);
-
+            /*the world manager will take care of the light of the sun, the world manager looks if the raining switch is on,
+            * and updates accordingly, therefore there's no need to do anything here.*/
             if (constants.RAY_CASTING_DISTANCE < 1800){
                 float LightDistanceDifference = (1800 - 1000)/9f;
                 constants.RAY_CASTING_DISTANCE += LightDistanceDifference * delta;
@@ -106,38 +105,6 @@ public class weatherManager {
         }
         worldManager.getDayLight().setDistance(constants.RAY_CASTING_DISTANCE);
         worldManager.getNightLight().setDistance(constants.RAY_CASTING_DISTANCE);
-    }
-
-    public static void createCloud(){
-        for (int i = 2; i < 7; i++){
-            for (int j = 0; j < 2; j++) {
-                TextureRegion region = new TextureRegion(new Texture("cloud/layer"+i+".png"));
-                if (j == 1) region.flip(true, false);
-                cloud c = new cloud(region, j * 400, i == 3 ? 50 : 20, 400, 240, getCloudLayer(i));
-                switch (i){
-                    case 2:
-                        c.setVelocity(constants.PLAYER_VELOCITY - 20);
-                        break;
-                    case 3:
-                        c.setVelocity(constants.PLAYER_VELOCITY - 40);
-                        break;
-                    case 4:
-                        c.setVelocity(constants.PLAYER_VELOCITY - 60);
-                        break;
-                    case 5:
-                        c.setVelocity(0);
-                        break;
-                    case 6:
-                        c.setVelocity(constants.PLAYER_VELOCITY -140f);
-                        break;
-                }
-                clouds.add(c);
-            }
-        }
-        cloud0 = new cloud(new TextureRegion(new Texture("cloud/layer0.png")),
-                0, 150, 800, 480, CLOUD_LAYER.LAYER0);
-        cloud1 = new cloud(new TextureRegion(new Texture("cloud/layer1.png")),
-                0, 0, 800, 480, CLOUD_LAYER.LAYER1);
     }
 
     public static void createSky(){
@@ -174,22 +141,21 @@ public class weatherManager {
         if (sky2.getPosition().x + constants.WORLD_WIDTH < uiCamera.position.x - uiCamera.viewportWidth/2){
             sky2.reposition(sky2.getPosition().x + 2 * constants.WORLD_WIDTH);
         }
-
     }
 
     public static void updateRain(float delta, OrthographicCamera gameCamera){
+        if (isRaining && shouldDrawRain){
+            if (rainAlpha < 1f){
+                rainAlpha += rainAlpha * delta/4;
+            }else rainAlpha = 1f;
+        }else {
+            float rainAlphaDifference = (0.1f - 1f)/4f;
+            if (rainAlpha > 0.1f){
+                rainAlpha += rainAlphaDifference * delta;
+            }else rainAlpha = 0.1f;
+        }
         for (rainCluster cluster : clusters){
             cluster.update(delta);
-            if (isRaining){
-                if (rainAlpha < 1f){
-                    rainAlpha += rainAlpha * delta/8;
-                }else rainAlpha = 1f;
-            }else {
-                float rainAlphaDifference = (0.1f - 1f)/4f;
-                if (rainAlpha > 0.1f){
-                    rainAlpha += rainAlphaDifference * delta;
-                }else rainAlpha = 0.1f;
-            }
             if (cluster.getPosition().y + cluster.getHeight() < 0){
                 cluster.reposition(cluster.getPosition().x, cluster.getPosition().y + 2 * constants.RAIN_CLUSTER_HEIGHT);
             }
@@ -220,19 +186,8 @@ public class weatherManager {
         }
     }
 
-    public static void updateClouds(float delta, OrthographicCamera gameCamera, olta player){
-        for (cloud c : clouds){
-            if (!player.isDead() && !player.isThrowing()){
-                c.update(delta);
-            }
-            if (c.getPosition().x + c.getWidth() < gameCamera.position.x - gameCamera.viewportWidth/2){
-                c.reposition(c.getPosition().x + 2 * 400, c.getPosition().y);
-            }
-        }
-    }
-
     public static void drawRain(SpriteBatch batch){
-        if (shouldDraw) {
+        if (shouldDraw && shouldDrawRain) {
             batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, rainAlpha);
             for (rainCluster cluster : clusters) {
                 cluster.draw(batch);
@@ -256,49 +211,31 @@ public class weatherManager {
             sky1.draw(batch);
             sky2.draw(batch);
             batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 1f);
+
+            drawLightning(batch);
         }
     }
 
-    public static void drawClouds(SpriteBatch batch, CLOUD_LAYER layer){
-        if (shouldDraw) {
-            if (layer == CLOUD_LAYER.LAYER0) {
-                cloud0.draw(batch);
-            } else if (layer == CLOUD_LAYER.LAYER1) {
-                cloud1.draw(batch);
-            } else {
-                for (cloud c : clouds) {
-                    if (layer == c.getLayer())
-                        c.draw(batch);
-                }
-            }
-        }
+    public static void drawLightning(SpriteBatch batch){
+        lightStrike.draw(batch);
     }
 
     public static void dispose(){
         for (rainCluster cluster : clusters){
             cluster.dispose();
         }
-        for (cloud c : clouds){
-            c.dispose();
-        }
         clusters.clear();
-        clouds.clear();
-
         mist1.dispose();
         mist2.dispose();
         sky1.dispose();
         sky2.dispose();
-        if (cloud0 != null){
-            cloud0.dispose();
-        }
-        if (cloud1 != null){
-            cloud1.dispose();
-        }
+        lightStrike.dispose();
         skyAlpha = 0.1f;
         mistAlpha = 0.1f;
         rainAlpha = 0.1f;
         isRaining = false;
         shouldDraw = false;
+        shouldDrawRain = false;
         prepareToStop = false;
     }
 
@@ -348,81 +285,6 @@ public class weatherManager {
 
         public void dispose(){
             cluster.getTexture().dispose();
-        }
-    }
-
-    private static CLOUD_LAYER getCloudLayer(int i){
-        switch (i){
-            case 0:
-                return CLOUD_LAYER.LAYER0;
-            case 1:
-                return CLOUD_LAYER.LAYER1;
-            case 2:
-                return CLOUD_LAYER.LAYER2;
-            case 3:
-                return CLOUD_LAYER.LAYER3;
-            case 4:
-                return CLOUD_LAYER.LAYER4;
-            case 5:
-                return CLOUD_LAYER.LAYER5;
-            case 6:
-                return CLOUD_LAYER.LAYER6;
-            default: throw new IllegalArgumentException("given integer argument is beyond the cloud layer limit");
-        }
-    }
-
-    static class cloud {
-        private TextureRegion cloud;
-        private Vector2 position = new Vector2(0, 0);
-        private float width = 0f, height = 0f;
-        private CLOUD_LAYER layer;
-        private float velocity = 0f;
-
-        public cloud (TextureRegion region, float x, float y, float width, float height, CLOUD_LAYER layer){
-            //cloud = new TextureRegion(new Texture("clouds1.png"));
-            //cloud.flip(false, true);
-            this.cloud = region;
-            this.position.x = x;
-            this.position.y = y;
-            this.width = width;
-            this.height = height;
-            this.layer = layer;
-        }
-
-        public void setVelocity(float velocity) {
-            this.velocity = velocity;
-        }
-
-        public CLOUD_LAYER getLayer() {
-            return layer;
-        }
-
-        public void update(float delta){
-            position.x += velocity * delta;
-        }
-
-        public Vector2 getPosition() {
-            return position;
-        }
-
-        public float getWidth() {
-            return width;
-        }
-
-        public float getHeight() {
-            return height;
-        }
-
-        public void reposition(float x, float y){
-            this.position.x = x;
-            this.position.y = y;
-        }
-
-        public void draw(SpriteBatch batch){
-             batch.draw(cloud, position.x, position.y, width, height);
-        }
-        public void dispose(){
-            cloud.getTexture().dispose();
         }
     }
 
@@ -505,6 +367,64 @@ public class weatherManager {
 
         public void dispose(){
             sky.getTexture().dispose();
+        }
+    }
+
+    static class lightning{
+        private TextureRegion lightning;
+        private Vector2 lightningPosition = new Vector2(0, 0);
+        private float lightningWidth = 0, lightningHeight = 0f;
+        private float counter = 0f;
+        private float flashCounter = 0f;
+        private boolean shouldFlash = false, isLightingRandomized = false;
+
+        public lightning(){
+            lightning = new TextureRegion(new Texture("cloud/lightning.png"));
+            lightningWidth = 80f;
+            lightningHeight = 220f;
+            lightningPosition.x = constants.WORLD_WIDTH/2f - 40f;
+            lightningPosition.y = constants.WORLD_HEIGHT - 220f;
+        }
+
+        public void update(float delta){
+            if (isRaining) {
+                counter += delta;
+                if (counter > 3f) {
+                    shouldFlash = MathUtils.randomBoolean();
+                    isLightingRandomized = false;
+                    counter = 0f;
+                }
+                if (shouldFlash) {
+                    if (!isLightingRandomized) {
+                        lightningWidth = MathUtils.random(40f, 80f);
+                        lightningHeight = MathUtils.random(120f, 240f);
+                        lightningPosition.x = MathUtils.random(0f, constants.WORLD_WIDTH - lightningWidth);
+                        lightningPosition.y = constants.WORLD_HEIGHT - lightningHeight;
+                        lightning.flip(MathUtils.randomBoolean(), false);
+                        isLightingRandomized = true;
+                    }
+
+                    flashCounter += delta;
+                    if (flashCounter > 0.2f) {
+                        flashCounter = 0f;
+                        shouldFlash = false;
+                    }
+                }
+            }else {
+                counter = 0f;
+                shouldFlash = false;
+                flashCounter = 0f;
+            }
+        }
+
+        public void draw(SpriteBatch batch){
+            if (shouldFlash) {
+                batch.draw(lightning, lightningPosition.x, lightningPosition.y, lightningWidth, lightningHeight);
+            }
+        }
+
+        public void dispose(){
+            lightning.getTexture().dispose();
         }
     }
 }

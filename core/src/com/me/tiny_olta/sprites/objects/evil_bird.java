@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.me.tiny_olta.managers.EnemyManager;
 import com.me.tiny_olta.constants;
-import com.me.tiny_olta.sprites.olta;
+import com.me.tiny_olta.sprites.hero;
 import com.me.tiny_olta.sprites.throwableBomb;
 
 public class evil_bird extends collidableObjects {
@@ -76,7 +76,7 @@ public class evil_bird extends collidableObjects {
     }
 
     @Override
-    public boolean collidedWithPlayer(olta player) {
+    public boolean collidedWithPlayer(hero player) {
         return true;
     }
 

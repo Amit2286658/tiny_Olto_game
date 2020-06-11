@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.me.tiny_olta.constants;
-import com.me.tiny_olta.sprites.olta;
+import com.me.tiny_olta.sprites.hero;
 
 public class backgroundManager {
 
@@ -43,6 +43,7 @@ public class backgroundManager {
         //layers = new Array<>();
         bg0 = new backgroundElement(new Texture("background/layer0.png"), 0, ELEMENT_LAYER.LAYER0);
         bg1 = new backgroundElement(new Texture("background/layer1.png"), 0, ELEMENT_LAYER.LAYER1);
+        //bg1.setPosition(new Vector2(0, -100));
         for (int i = 2; i < 7; i++){
             Array<backgroundElement> list = new Array<>();
             for (int j = 0; j < constants.BACKGROUND_ELEMENT_COUNT; j++){
@@ -51,19 +52,19 @@ public class backgroundManager {
                         getLayer(i));
                 switch (i){
                     case 2:
-                        element.setVelocity(constants.PLAYER_VELOCITY - 20);
+                        element.setVelocity(constants.PLAYER_VELOCITY - constants.PLAYER_VELOCITY * 25/100f);
                         break;
                     case 3:
-                        element.setVelocity(constants.PLAYER_VELOCITY - 40);
+                        element.setVelocity(constants.PLAYER_VELOCITY - constants.PLAYER_VELOCITY * 50/100f);
                         break;
                     case 4:
-                        element.setVelocity(constants.PLAYER_VELOCITY - 60);
+                        element.setVelocity(constants.PLAYER_VELOCITY - constants.PLAYER_VELOCITY * 75/100f);
                         break;
                     case 5:
                         element.setVelocity(0);
                         break;
                     case 6:
-                        element.setVelocity(constants.PLAYER_VELOCITY -140f);
+                        element.setVelocity(constants.PLAYER_VELOCITY - 2 * constants.PLAYER_VELOCITY * 75/100f);//- 140f);
                         break;
                 }
                list.add(element);
@@ -72,7 +73,31 @@ public class backgroundManager {
         }
     }
 
-    public static void update(float delta, OrthographicCamera gameCamera, olta player){
+    public static void reconfigureBackgroundElementsVelocity(){
+        for (Array<backgroundElement> list : elements){
+            for (backgroundElement element : list){
+                switch (element.getLayer()){
+                    case LAYER2:
+                        element.setVelocity(constants.PLAYER_VELOCITY - constants.PLAYER_VELOCITY * 25/100f);
+                        break;
+                    case LAYER3:
+                        element.setVelocity(constants.PLAYER_VELOCITY - constants.PLAYER_VELOCITY * 50/100f);
+                        break;
+                    case LAYER4:
+                        element.setVelocity(constants.PLAYER_VELOCITY - constants.PLAYER_VELOCITY * 75/100f);
+                        break;
+                    case LAYER5:
+                        element.setVelocity(0);
+                        break;
+                    case LAYER6:
+                        element.setVelocity(constants.PLAYER_VELOCITY - 2 * constants.PLAYER_VELOCITY * 75/100f);//- 140f);
+                        break;
+                }
+            }
+        }
+    }
+
+    public static void update(float delta, OrthographicCamera gameCamera, hero player){
         for (Array<backgroundElement> list : elements){
             for (backgroundElement item : list){
                 if (!player.isDead() && !player.isThrowing())
@@ -146,17 +171,7 @@ public class backgroundManager {
         for (Array<backgroundElement> layers : elements) {
             for (backgroundElement element : layers) {
                 if (element.getLayer() == layer) {
-                    /*switch (layer){
-                        case LAYER2:
-                            batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, alphaLayer2);
-                            break;
-                        case LAYER3:
-                            batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, alphaLayer3);
-                            break;
-                    }*/
                     element.draw(batch);
-                    if (batch.getColor().a < 1f)
-                        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 1f);
                 }
             }
         }

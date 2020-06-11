@@ -56,7 +56,8 @@ public class titleScreen extends screen {
         bcg.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                rush.setScreen(new gameScreen(rush.getBatch()));
+                Gdx.input.setInputProcessor(null);
+                rush.setScreen(new gameScreen(rush));
                 return false;
             }
         });
@@ -103,7 +104,7 @@ public class titleScreen extends screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.setProjectionMatrix(getUiCamera().combined);
-        guiManager.draw();
+        guiManager.drawTitleScreen();
     }
 
     @Override

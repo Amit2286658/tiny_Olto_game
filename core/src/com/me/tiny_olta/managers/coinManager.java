@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.me.tiny_olta.constants;
 import com.me.tiny_olta.sprites.coin;
-import com.me.tiny_olta.sprites.olta;
+import com.me.tiny_olta.sprites.hero;
 
 public class coinManager {
 
@@ -21,7 +21,7 @@ public class coinManager {
         }
     }
 
-    public static void update(OrthographicCamera gameCam, olta player, float delta){
+    public static void update(OrthographicCamera gameCam, hero player, float delta){
         for (coin c : activeCoins){
             c.update(delta);
             if (player.getShape().overlaps(c.getCollisionShape())){

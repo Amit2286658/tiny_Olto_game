@@ -64,7 +64,7 @@ public class coin extends collidableObjects {
     * coinManager will receive the returned value and then deal with specific properties of the coin, tbh I'd
     * prefer to handle everything right in this class, easy to maintain, you know :)*/
     @Override
-    public boolean collidedWithPlayer(olta player) {
+    public boolean collidedWithPlayer(hero player) {
         if (isCoinActive) {
             hasCoinBeenCollected = true;
             score = 1;

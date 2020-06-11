@@ -16,7 +16,7 @@ public class vegetationManager {
     private static Array<tree> trees = new Array<>();
     private static Array<TreeTypeIdTextures> reserveTextureArray = new Array<>(5);
 
-    public static void createTrees(float player_x, World world){
+    public static void createTrees(World world){
         for (int i = 1; i < 4; i++){
             TextureRegion region = new TextureRegion(new Texture("veg/trees/circle_tree_"+i+".png"));
             tree.TYPE type = getTreeTypeByInteger(i);
@@ -30,7 +30,7 @@ public class vegetationManager {
                 new TextureRegion(new Texture("veg/trees/circle_tree_"+3+".png")), getTreeTypeByInteger(3), world));
 
         for (int i = 0; i < constants.TREE_COUNT; i++){
-            trees.add(new tree(player_x + i * constants.FIXED_TREE_DISTANCE, world));
+            trees.add(new tree(/*player_x +*/ i * constants.FIXED_TREE_DISTANCE, world));
         }
     }
 
@@ -53,6 +53,28 @@ public class vegetationManager {
     public static void draw(SpriteBatch batch){
         for (tree t : trees){
             t.drawTexture(batch);
+        }
+    }
+
+    public static void draw(SpriteBatch batch, boolean shouldLookFront){
+        if (shouldLookFront){
+            for (tree t : trees){
+                if (t.getTreeType() == tree.TYPE.TREE){
+                    if (!t.isBack){
+                        t.drawTexture(batch);
+                    }
+                }
+            }
+        }else {
+            for (tree t : trees){
+                if (t.getTreeType() == tree.TYPE.TREE){
+                    if (t.isBack){
+                        t.drawTexture(batch);
+                    }
+                }else {
+                    t.drawTexture(batch);
+                }
+            }
         }
     }
 

@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.me.tiny_olta.managers.EnemyManager;
 import com.me.tiny_olta.constants;
-import com.me.tiny_olta.sprites.olta;
+import com.me.tiny_olta.sprites.hero;
 import com.me.tiny_olta.sprites.throwableBomb;
 
 public class rocketBomber extends collidableObjects {
@@ -92,7 +92,7 @@ public class rocketBomber extends collidableObjects {
         return bombs;
     }
 
-    public boolean checkPlayerBombCollision(olta player){
+    public boolean checkPlayerBombCollision(hero player){
         for (throwableBomb bomb : bombs){
             Circle circle = bomb.getExplosive().getExplosiveCircle();
             if (bomb.hasExploded()) {
@@ -125,7 +125,7 @@ public class rocketBomber extends collidableObjects {
     }
 
     @Override
-    public boolean collidedWithPlayer(olta player) {
+    public boolean collidedWithPlayer(hero player) {
         return true;
     }
 

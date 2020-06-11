@@ -1,0 +1,75 @@
+spungie.png
+size: 5530, 411
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+frame-1
+  rotate: false
+  xy: 0, 0
+  size: 553, 411
+  orig: 553, 411
+  offset: 0, 0
+  index: 0
+frame-2
+  rotate: false
+  xy: 553, 0
+  size: 553, 411
+  orig: 553, 411
+  offset: 0, 0
+  index: 1
+frame-3
+  rotate: false
+  xy: 1106, 0
+  size: 553, 411
+  orig: 553, 411
+  offset: 0, 0
+  index: 2
+frame-4
+  rotate: false
+  xy: 1659, 0
+  size: 553, 411
+  orig: 553, 411
+  offset: 0, 0
+  index: 3
+frame-5
+  rotate: false
+  xy: 2212, 0
+  size: 553, 411
+  orig: 553, 411
+  offset: 0, 0
+  index: 4
+frame-6
+  rotate: false
+  xy: 2765, 0
+  size: 553, 411
+  orig: 553, 411
+  offset: 0, 0
+  index: 5
+frame-7
+  rotate: false
+  xy: 3318, 0
+  size: 553, 411
+  orig: 553, 411
+  offset: 0, 0
+  index: 6
+frame-8
+  rotate: false
+  xy: 3871, 0
+  size: 553, 411
+  orig: 553, 411
+  offset: 0, 0
+  index: 7
+frame-9
+  rotate: false
+  xy: 4424, 0
+  size: 553, 411
+  orig: 553, 411
+  offset: 0, 0
+  index: 8
+frame-10
+  rotate: false
+  xy: 4977, 0
+  size: 553, 411
+  orig: 553, 411
+  offset: 0, 0
+  index: 9

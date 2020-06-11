@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.me.tiny_olta.managers.EnemyManager;
 import com.me.tiny_olta.constants;
-import com.me.tiny_olta.sprites.olta;
+import com.me.tiny_olta.sprites.hero;
 import com.me.tiny_olta.sprites.throwableBomb;
 
 public abstract class collidableObjects extends objects{
@@ -27,7 +27,7 @@ public abstract class collidableObjects extends objects{
     }
 
     public abstract boolean collidedWithBomb(throwableBomb bomb);
-    public abstract boolean collidedWithPlayer(olta player);
+    public abstract boolean collidedWithPlayer(hero player);
 
     public void alive(){
         destroyed = false;

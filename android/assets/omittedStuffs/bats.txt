@@ -1,0 +1,19 @@
+bats.png
+size: 984, 409
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bat
+  rotate: false
+  xy: 0, 0
+  size: 492, 409
+  orig: 492, 409
+  offset: 0, 0
+  index: 0
+bat
+  rotate: false
+  xy: 492, 0
+  size: 492, 409
+  orig: 492, 409
+  offset: 0, 0
+  index: 1

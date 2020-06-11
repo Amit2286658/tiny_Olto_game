@@ -93,13 +93,12 @@ public class explosion {
     }
 
     public void dispose(){
-        this.texture.dispose();
-        texture.dispose();
         for (TextureRegion region : animation.getKeyFrames()){
             region.getTexture().dispose();
         }
         for (TextureRegion region : regions){
             region.getTexture().dispose();
         }
+        texture.dispose();
     }
 }
